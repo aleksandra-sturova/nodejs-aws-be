@@ -22,5 +22,20 @@ export const PRODUCTS = [
     title: 'iPhone 12 mini',
     description: 'Shop iPhone 12 mini',
     price: 699,
+  }, {
+    id: 5,
+    title: 'iPhone 11',
+    description: 'Shop iPhone 11, 64GB',
+    price: 599,
+  }, {
+    id: 6,
+    title: 'iPhone 11',
+    description: 'Shop iPhone 11, 128GB',
+    price: 649,
+  }, {
+    id: 7,
+    title: 'iPhone 11',
+    description: 'Shop iPhone 11, 256GB',
+    price: 749,
   },
 ];

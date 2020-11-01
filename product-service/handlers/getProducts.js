@@ -1,5 +1,5 @@
 import { ProductsService } from '../service/products-service';
-import { RESPONSE } from '../utils/reponse';
+import { RESPONSE } from '../utils/response';
 
 const getProducts = async (event) => {
   try {

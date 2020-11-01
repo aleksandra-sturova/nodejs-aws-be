@@ -1,11 +1,11 @@
 import { ProductsService } from '../service/products-service';
-import { RESPONSE } from '../utils/reponse';
+import { RESPONSE } from '../utils/response';
 
 const getProductById = async (event) => {
   try {
     const { id } = event.pathParameters || {};
 
-    if (!id) {
+    if (!id || isNaN(id)) {
       return RESPONSE._400('Product id is not valid');
     }
 
