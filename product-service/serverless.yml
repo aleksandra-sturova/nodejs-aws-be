@@ -32,3 +32,4 @@ functions:
           path: products/{id}
           method: get
           cors: true
+          
