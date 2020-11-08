@@ -1,7 +1,7 @@
 import { ProductsService } from '../service/products-service';
 import { RESPONSE } from '../utils/response';
 
-const getProductById = async (event) => {
+export const getProductById = async (event) => {
   try {
     const { id } = event.pathParameters || {};
 
@@ -20,5 +20,3 @@ const getProductById = async (event) => {
     return RESPONSE._500();
   }
 };
-
-export const handler = async (event) => await getProductById(event);

@@ -1,4 +1,4 @@
-import { handler } from './getProductById';
+import { getProductById } from './getProductById';
 import { RESPONSE } from '../utils/response';
 import { ProductsService } from '../service/products-service';
 
@@ -18,14 +18,14 @@ describe('getProductById', () => {
 
   test('should return product by id with status code 200', async () => {
     spy.mockImplementation(() => Promise.resolve(mockProducts[0]));
-    await handler(eventMock);
+    await getProductById(eventMock);
 
     await expect(RESPONSE._200).toHaveBeenCalledWith(mockProducts[0]);
     await expect(spy).toHaveBeenCalledWith(+mockProducts[0].id);
   });
 
   test('should return error message and status code 400 for invalid id', async () => {
-    await handler(eventMockInvalid);
+    await getProductById(eventMockInvalid);
 
     await expect(RESPONSE._400).toHaveBeenCalledWith('Product id is not valid');
     await expect(spy).not.toHaveBeenCalledWith();
@@ -33,14 +33,14 @@ describe('getProductById', () => {
 
   test('should return error message and status code 400 for not existing id', async () => {
     spy.mockImplementation(() => Promise.resolve(null));
-    await handler(eventMock);
+    await getProductById(eventMock);
 
     await expect(RESPONSE._404).toHaveBeenCalledWith(`Product with id ${eventMock.pathParameters.id} not found`);
   });
 
   test('should return status code 500in case of error', async () => {
     spy.mockImplementation(() => Promise.reject(false));
-    await handler(eventMock);
+    await getProductById(eventMock);
 
     await expect(RESPONSE._500).toHaveBeenCalled();
   });

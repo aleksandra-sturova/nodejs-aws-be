@@ -1,7 +1,7 @@
 import { ProductsService } from '../service/products-service';
 import { RESPONSE } from '../utils/response';
 
-const getProducts = async (event) => {
+export const getProducts = async (event) => {
   try {
     const products = await ProductsService.getAll();
 
@@ -10,5 +10,3 @@ const getProducts = async (event) => {
     return RESPONSE._500();
   }
 };
-
-export const handler = async (event) => await getProducts(event);
