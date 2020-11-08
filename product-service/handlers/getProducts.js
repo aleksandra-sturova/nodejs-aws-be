@@ -1,12 +1,20 @@
-import { ProductsService } from '../service/products-service';
+import { getClient } from '../db/db';
 import { RESPONSE } from '../utils/response';
 
-export const getProducts = async (event) => {
-  try {
-    const products = await ProductsService.getAll();
+const QUERY = 'SELECT id, title, description, price, count FROM products LEFT JOIN stocks ON id = product_id';
 
-    return RESPONSE._200(products);
+export const getProducts = async (event) => {
+  const client = getClient();
+
+  try {
+    await client.connect();
+
+    const result = await client.query(QUERY);
+
+    return RESPONSE._200(result.rows);
   } catch (e) {
     return RESPONSE._500();
+  } finally {
+    await client.end();
   }
 };
