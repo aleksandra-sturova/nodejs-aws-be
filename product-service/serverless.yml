@@ -13,7 +13,10 @@ provider:
 custom:
   webpack:
     webpackConfig: 'webpack.config.js'
-    includeModules: true
+    includeModules:
+      forceInclude:
+        - pg
+        - uuid
     keepOutputDirectory: true
     packager: 'yarn'
 
@@ -32,4 +35,11 @@ functions:
           path: products/{id}
           method: get
           cors: true
+  createProduct:
+      handler: handler.createProduct
+      events:
+        - http:
+            path: products
+            method: post
+            cors: true
           
