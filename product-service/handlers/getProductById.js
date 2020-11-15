@@ -2,9 +2,11 @@ import { validate } from 'uuid';
 import { getClient } from '../db/db';
 import { RESPONSE } from '../utils/response';
 
-const QUERY = 'SELECT id, title, description, price, count FROM products LEFT JOIN stocks ON id = product_id WHERE id = $1';
+const QUERY =
+  'SELECT id, title, description, price, count FROM products LEFT JOIN stocks ON id = product_id WHERE id = $1';
 
 export const getProductById = async (event) => {
+  console.log('Entered get product lambda function, event: ', event);
   const client = getClient();
 
   try {
@@ -26,8 +28,7 @@ export const getProductById = async (event) => {
   } catch (e) {
     console.log(e);
     return RESPONSE._500();
-  }
-  finally {
+  } finally {
     await client.end();
   }
 };
