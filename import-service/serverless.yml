@@ -7,7 +7,10 @@ plugins:
 custom:
   webpack:
     webpackConfig: 'webpack.config.js'
-    includeModules: true
+    includeModules:
+      forceInclude:
+        - csv-parser
+        - aws-sdk
     keepOutputDirectory: true
     packager: 'yarn'
 
@@ -33,3 +36,12 @@ functions:
           path: /import
           method: get
           cors: true
+  importFileParser:
+    handler: handler.importFileParser
+    events:
+      - s3:
+          bucket: 'nodejs-aws-import-product-service'
+          event: 's3:ObjectCreated:*'
+          rules:
+            - prefix: uploaded/
+          existing: true
