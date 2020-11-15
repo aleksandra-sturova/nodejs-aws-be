@@ -1,6 +1,6 @@
 import { validate } from 'uuid';
 import { getClient } from '../db/db';
-import { RESPONSE } from '../utils/response';
+import { RESPONSE } from '../../utils/response';
 
 const QUERY =
   'SELECT id, title, description, price, count FROM products LEFT JOIN stocks ON id = product_id WHERE id = $1';
