@@ -1,5 +1,5 @@
 import { getClient } from '../db/db';
-import { RESPONSE } from '../utils/response';
+import { RESPONSE } from '../../utils/response';
 
 const QUERY_PRODUCTS = 'INSERT INTO products(title, description, price) VALUES($1,$2,$3) RETURNING *';
 const QUERY_STOCKS = 'INSERT INTO stocks(product_id, count) VALUES($1,$2) RETURNING *';

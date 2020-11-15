@@ -1,5 +1,5 @@
 import { getProducts } from './getProducts';
-import { RESPONSE } from '../utils/response';
+import { RESPONSE } from '../../utils/response';
 import { ProductsService } from '../service/products-service';
 
 jest.mock('../service/products-service');

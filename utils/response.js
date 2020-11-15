@@ -1,4 +1,4 @@
-import { HEADERS } from '../constants';
+import { HEADERS } from '../constants/index';
 
 const responseCreator = (statusCode, data = {}) => ({
   headers: HEADERS,
