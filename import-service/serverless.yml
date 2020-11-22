@@ -1,0 +1,47 @@
+service: nodejs-aws-import-product-service
+frameworkVersion: '2'
+
+plugins:
+  - serverless-webpack
+
+custom:
+  webpack:
+    webpackConfig: 'webpack.config.js'
+    includeModules:
+      forceInclude:
+        - csv-parser
+        - aws-sdk
+    keepOutputDirectory: true
+    packager: 'yarn'
+
+provider:
+  name: aws
+  runtime: nodejs12.x
+  stage: dev
+  region: eu-west-1
+
+  iamRoleStatements:
+    - Effect: "Allow"
+      Action: "s3:ListBucket"
+      Resource: "arn:aws:s3:::nodejs-aws-import-product-service"
+    - Effect: "Allow"
+      Action: "s3:*"
+      Resource: "arn:aws:s3:::nodejs-aws-import-product-service/*"
+
+functions:
+  importProductsFile:
+    handler: handler.importProductsFile
+    events:
+      - http:
+          path: /import
+          method: get
+          cors: true
+  importFileParser:
+    handler: handler.importFileParser
+    events:
+      - s3:
+          bucket: 'nodejs-aws-import-product-service'
+          event: 's3:ObjectCreated:*'
+          rules:
+            - prefix: uploaded/
+          existing: true

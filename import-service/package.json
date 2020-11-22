@@ -1,0 +1,20 @@
+{
+  "name": "import-service",
+  "version": "1.0.0",
+  "description": "",
+  "main": "handler.js",
+  "scripts": {
+    "test": "jest"
+  },
+  "author": "",
+  "license": "ISC",
+  "devDependencies": {
+    "serverless-webpack": "^5.3.5",
+    "webpack": "^5.3.2",
+    "webpack-node-externals": "^2.5.2"
+  },
+  "dependencies": {
+    "aws-sdk": "^2.792.0",
+    "csv-parser": "^2.3.3"
+  }
+}
