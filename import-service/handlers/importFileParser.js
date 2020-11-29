@@ -8,8 +8,10 @@ export const importFileParser = async (event) => {
 
   try {
     const { Records: records } = event;
-    const s3 = new AWS.S3({ region: REGION });
     console.log('Records: ', records);
+
+    const s3 = new AWS.S3({ region: REGION });
+    const sqs = new AWS.SQS({ region: REGION });
 
     await Promise.all(
       records.map(async (record) => {
@@ -26,14 +28,31 @@ export const importFileParser = async (event) => {
 
           s3Stream
             .pipe(csvParser())
-            .on('data', (data) => console.info('Data: ', data))
+            .on('data', async (data) => {
+              const sqsUrl = process.env.SQS_URL;
+              console.log('SQS Url: ', sqsUrl, ', data: ', data);
+
+              try {
+                await sqs
+                  .sendMessage({
+                    MessageBody: JSON.stringify(data),
+                    QueueUrl: sqsUrl,
+                  })
+                  .promise();
+
+                console.info('Successfully sent message to SQS, SQS Url', sqsUrl);
+              } catch (err) {
+                console.error('Error sending message to SQS, SQS Url', sqsUrl);
+              }
+            })
             .on('error', (e) => {
               console.error('Error', e);
               reject();
             })
             .on('end', async () => {
               try {
-                await s3.copyObject({
+                await s3
+                  .copyObject({
                     Bucket: S3_BUCKET,
                     CopySource: `${S3_BUCKET}/${recordKey}`,
                     Key: parsedKey,

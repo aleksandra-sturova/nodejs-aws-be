@@ -11,6 +11,7 @@ custom:
       forceInclude:
         - csv-parser
         - aws-sdk
+        - node-fetch
     keepOutputDirectory: true
     packager: 'yarn'
 
@@ -19,6 +20,11 @@ provider:
   runtime: nodejs12.x
   stage: dev
   region: eu-west-1
+  environment:
+    SQS_URL:
+      Ref: catalogItemsQueue
+    SNS_ARN:
+      Ref: createProductTopic
 
   iamRoleStatements:
     - Effect: "Allow"
@@ -27,6 +33,41 @@ provider:
     - Effect: "Allow"
       Action: "s3:*"
       Resource: "arn:aws:s3:::nodejs-aws-import-product-service/*"
+    - Effect: "Allow"
+      Action: "sqs:*"
+      Resource:
+        - Fn::GetAtt: [catalogItemsQueue, Arn]
+    - Effect: "Allow"
+      Action: "sns:*"
+      Resource:
+        - Ref: createProductTopic
+
+resources:
+  Resources:
+    catalogItemsQueue:
+      Type: AWS::SQS::Queue
+      Properties:
+        QueueName: catalog-items-sqs
+    createProductTopic:
+      Type: AWS::SNS::Topic
+      Properties:
+        TopicName: create-product-topic
+    createProductTopicSubscription:
+      Type: AWS::SNS::Subscription
+      Properties:
+        Endpoint: alexandra.sturova@gmail.com
+        Protocol: email
+        TopicArn:
+          Ref: createProductTopic
+    createProductTopicSubscriptionFiltered:
+      Type: AWS::SNS::Subscription
+      Properties:
+        Endpoint: alexsandra1313@gmail.com
+        Protocol: email
+        TopicArn:
+          Ref: createProductTopic
+        FilterPolicy:
+          count: [{ numeric: ['>', 1] }]
 
 functions:
   importProductsFile:
@@ -45,3 +86,10 @@ functions:
           rules:
             - prefix: uploaded/
           existing: true
+  catalogBatchProcess:
+    handler: handler.catalogBatchProcess
+    events:
+      - sqs:
+          batchSize: 5
+          arn:
+            Fn::GetAtt: [catalogItemsQueue, Arn]
