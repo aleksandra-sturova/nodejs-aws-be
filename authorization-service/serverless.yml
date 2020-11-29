@@ -1,0 +1,25 @@
+service: authorization-service
+frameworkVersion: '2'
+
+plugins:
+  - serverless-dotenv-plugin
+  - serverless-webpack
+
+custom:
+  webpack:
+    webpackConfig: 'webpack.config.js'
+    includeModules: true
+    keepOutputDirectory: true
+    packager: 'yarn'
+    environment:
+      aleksandra_sturova: ${env:aleksandra_sturova}
+
+provider:
+  name: aws
+  runtime: nodejs12.x
+  stage: dev
+  region: eu-west-1
+
+functions:
+  basicAuthorizer:
+    handler: handler.basicAuthorizer
