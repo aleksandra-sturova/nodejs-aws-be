@@ -2,7 +2,7 @@ import AWS from 'aws-sdk';
 import fetch from 'node-fetch';
 import { API, REGION } from '../../constants';
 import { RESPONSE } from '../../utils/response';
-
+// TODO: Refactor it - move to product service
 const sendNotification = async (data = {}) => {
   try {
     const message = JSON.stringify(data);
@@ -37,7 +37,7 @@ export const catalogBatchProcess = async (event) => {
     const { Records: records } = event;
     console.log('Records: ', records);
 
-    const products = await Promise.all(
+    return await Promise.all(
       records.map(async (record) => {
         const productData = JSON.parse(record.body);
         console.log('Product data', productData);
@@ -55,8 +55,6 @@ export const catalogBatchProcess = async (event) => {
         return productData;
       }),
     );
-
-    return RESPONSE._200(products);
   } catch (e) {
     console.log('Error while creating products', e);
     return RESPONSE._500();
