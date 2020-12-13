@@ -1,0 +1,22 @@
+{
+  "name": "bff-service",
+  "version": "1.0.0",
+  "description": "",
+  "engines": {
+    "node": "12.19.0"
+  },
+  "scripts": {
+    "eb:init": "eb init --platform node.js -r eu-west-1",
+    "eb:create": "eb create development --single --cname aleksandra-sturova-bff-service-dev",
+    "eb:deploy": "eb deploy development",
+    "eb:terminate": "eb terminate development",
+    "start": "node server.js"
+  },
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "axios": "^0.21.0",
+    "dotenv": "^8.2.0",
+    "express": "^4.17.1"
+  }
+}
